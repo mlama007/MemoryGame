@@ -149,11 +149,18 @@ let memoryValue = [];
 let memoryTilesID = [];
 let tilesFlipped = 0;
 
-
 //Function when card is clicked
 clickFunction = (element) => {
-    console.log(element);
-    element.setAttribute("class", "card open show")
+    tilesFlipped += 1;
+    if (tilesFlipped <= 2 && !element.setAttribute("class", "card macth")){
+        element.setAttribute("class", "card open show");
+        memoryValue.push(element);
+        console.log(memoryValue);
+    }
+    else {
+        element.setAttribute("class", "card")
+    }
+    
 }
 
 
