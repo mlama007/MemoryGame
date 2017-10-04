@@ -123,6 +123,7 @@ function shuffle(array) {
   
 // Shuffle and log results
 shuffle(deck.cards);
+console.log(deck.cards);
 
 // Loop through each card and create its HTML
 newGame = () => {
@@ -145,19 +146,32 @@ newGame = () => {
  *    + if all cards have matched, display a message with the final score (put this functionality in another function that you call from this one)
  */ 
 
-let memoryValue = [];
+let tileImages = [];
+let seenTiles = [];
 let memoryTilesID = [];
 let tilesFlipped = 0;
 
 //Function when card is clicked
 clickFunction = (element) => {
+    //add 1 for every card flipped
     tilesFlipped += 1;
+    //only allow flips if there are < or = 2 flipped cards and element class is not match
     if (tilesFlipped <= 2 && !element.setAttribute("class", "card macth")){
+        //flip and show card
         element.setAttribute("class", "card open show");
-        memoryValue.push(element);
-        console.log(memoryValue);
+        //add card's child element which hold the icon to seenTiles
+        seenTiles.push(element.children[0]);
+        console.log(seenTiles);
+        console.log(seenTiles[0].className);
+        console.log(seenTiles[1].className);
+        
+        //if className (icons) for each of the child elements are the same
+        if (seenTiles[0].className == seenTiles[1].className){
+            alert("ppop");
+        }
     }
-    else {
+    //close card if more than 2 tiles are flipped
+    else if (tilesFlipped > 2){
         element.setAttribute("class", "card")
     }
     
