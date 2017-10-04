@@ -85,9 +85,7 @@ const deck = {
         }
     ]
 }
-let memoryValue = [];
-let memoryTilesID = [];
-let tilesFlipped = 0;
+
 
 //consoles all card names
 // for (let i = 0; i < deck.cards.length; i++) {
@@ -125,21 +123,16 @@ function shuffle(array) {
   
 // Shuffle and log results
 shuffle(deck.cards);
-// console.log(deck.cards);
 
 // Loop through each card and create its HTML
-newBoard = () => {
+newGame = () => {
     tilesFlipped = 0;
     let output = '';
     for (let i = 0; i < deck.cards.length; i++) {
-        console.log(`<li class="${deck.cards[i].class}"><i class="${deck.cards[i].icon}"></i></li>`);
-        output += `<li class="${deck.cards[i].class}"><i class="${deck.cards[i].icon}"></i></li>`; 
-    }
+        output += `<li class="${deck.cards[i].class}" onclick="clickFunction(this)"><i class="${deck.cards[i].icon}"></i></li>`; 
+    };
     document.getElementById('deck').innerHTML = output;    
 }
-newBoard();
-
-
 
 /*
  * set up the event listener for a card. If a card is clicked:
@@ -150,20 +143,19 @@ newBoard();
  *    + if the cards do not match, remove the cards from the list and hide the card's symbol (put this functionality in another function that you call from this one)
  *    + increment the move counter and display it on the page (put this functionality in another function that you call from this one)
  *    + if all cards have matched, display a message with the final score (put this functionality in another function that you call from this one)
- */
+ */ 
 
-// const cardSelect = document.getElementsByClassName("card");
-// let cardName = deck.cards.name;
-// let cardClass = deck.cards.class;
-
-
-// cardSelect.on("click", function(event){
-//     deckClass = "card open show";
-//     console.log(deckClass);
-// });
+let memoryValue = [];
+let memoryTilesID = [];
+let tilesFlipped = 0;
 
 
-// // document.getElementsByClassName('card').addEventListener("click", function () { 
-// //     alert('Hello, world!');
-// //     cardSelect.innerHTML = "card open show"
-// // });
+//Function when card is clicked
+clickFunction = (element) => {
+    console.log(element);
+    element.setAttribute("class", "card open show")
+}
+
+
+//add each card's HTML to the page
+newGame();
