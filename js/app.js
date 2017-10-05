@@ -167,6 +167,7 @@ newGame = () => {
     seenTiles = [];
     tilesMatched = [];
     shuffle(deck.cards);
+    timer = new StopWatch();
 }
 
 //Function when card is clicked
@@ -179,6 +180,24 @@ clickFunction = (element) => {
     numMoves +=1;
     document.getElementsByClassName('moves')[0].innerHTML = numMoves;
     
+    //Change stars earned
+    let numStars = 3;
+    //if user has more than 20 moves, take off 1 star
+    if ( numMoves > 20 ){
+        document.getElementById("1").style.display="none";
+        numStars -=1;
+    }
+    //if user has more than 30 moves, take off 1 star
+    if ( numMoves > 30 ){
+        document.getElementById("2").style.display="none";
+        numStars -=1;
+    }
+    //if user has more than 40 moves, take off 1 star
+    if ( numMoves > 40 ){
+        document.getElementById("3").style.display="none";
+        numStars -=1;
+    }
+
     //add 1 for every card flipped
     tilesFlipped += 1;
     
@@ -217,10 +236,12 @@ clickFunction = (element) => {
                 timer.stop();
 
                 //don't display container with game
-                document.getElementsByClassName("container")[0].style.display="none";
+                document.getElementsByClassName("container")[0].style.visibility= "hidden";
 
-                //display winning message / with number of moves made / time length of game
+                //display winning message / number of stars / number of moves made / time length of game
                 document.getElementsByClassName('win')[0].style.display="block";
+                
+                document.getElementsByClassName('insertStars')[0].innerHTML = numStars;             
                 document.getElementsByClassName('enterNumMoves')[0].innerHTML = numMoves;             
                 document.getElementsByClassName('enterTime')[0].innerHTML = timer.duration();             
             }
@@ -246,3 +267,13 @@ clickFunction = (element) => {
 }
 //Start a new game (reshuffle, reset time and number of moves)
 newGame();
+
+newBoard = ()=>{
+    //display winning message / number of stars / number of moves made / time length of game
+    document.getElementsByClassName('win')[0].style.display="none";
+    //don't display container with game
+    document.getElementsByClassName("container")[0].style.visibility= "visible";
+    
+    
+    newGame();
+}

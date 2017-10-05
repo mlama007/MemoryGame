@@ -12,9 +12,10 @@
     <div class="win">
         <div>
             <h1>Congratulations!</h1>
+            <h3><span class="insertStars"></span> Stars</h3>
             <h2>You won!</h2>
             <p>You had a total of <span class="enterNumMoves"></span> moves and your time was <span class="enterTime"></span>.</p>
-            <a class="button" onclick="newGame()">Play again</a>
+            <a class="button" onclick="newBoard()">Play again</a>
         </div>
         <div class="confetti confetti1"></div>
         <div class="confetti confetti2"></div>
@@ -45,9 +46,9 @@
         </header>
         <section class="score-panel">
         	<ul class="stars">
-        		<li><i class="fa fa-star"></i></li>
-        		<li><i class="fa fa-star"></i></li>
-        		<li><i class="fa fa-star"></i></li>
+        		<li><i id="3" class="fa fa-star"></i></li>
+        		<li><i id="2" class="fa fa-star"></i></li>
+        		<li><i id="1" class="fa fa-star"></i></li>
         	</ul>
 
         	<span class="moves">0</span> Moves

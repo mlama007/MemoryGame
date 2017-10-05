@@ -160,7 +160,8 @@ h1 {
     margin: auto;
 }
 .win h1{
-    padding-top: 10em;
+    color: #02ccba;
+    padding-top: 8em;
     font-weight: bold;
 }
 .win p {
