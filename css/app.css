@@ -81,6 +81,29 @@ h1 {
     font-size: 33px;
 }
 
+.deck .card.close {
+    cursor: default;  
+    -webkit-animation-duration: .5s; 
+    animation-duration: .5s; 
+    -webkit-animation-fill-mode: both; 
+    animation-fill-mode: both;
+}
+@-webkit-keyframes close {
+   0%, 100% {-webkit-transform: translateX(0);} 
+   30%, 50%, 90% {-webkit-transform: translateX(-10px);} 
+   40%, 80% {-webkit-transform: translateX(10px);} 
+}
+@keyframes close { 
+   0%, 100% {transform: translateX(0);} 
+   30%, 50%, 90% {transform: translateX(-10px);} 
+   40%, 80% {transform: translateX(10px);} 
+}
+.close { 
+   -webkit-animation-name: close; 
+   animation-name: close; 
+}
+
+
 /*
  * Styles for the Score Panel
  */
