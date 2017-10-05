@@ -114,66 +114,135 @@ let numMoves = 0;
 //tiles matched
 let tilesMatched = [];
 
+//StopWatch from https://www.codeproject.com/articles/29330/javascript-stopwatch
+function StopWatch(){
+    var startTime = null;
+    var stopTime = null;
+    var running = false;
+    this.start = function(){        
+        if (running == true)
+            return;
+        else if (startTime != null)
+            stopTime = null;
+        
+        running = true;    
+        startTime = getTime();
+    }
+    this.stop = function(){
+        
+        if (running == false)
+            return;    
+        
+        stopTime = getTime();
+        running = false;
+    }
+    this.duration = function(){
+        if (startTime == null || stopTime == null)
+            return 'Undefined';
+        else
+            return (stopTime - startTime) / 1000;
+    }
+
+    this.isRunning = function() { return running; }
+
+    function getTime(){
+        var day = new Date();
+        return day.getTime();
+    }
+
+}
+//timer creates new stop wacth
+let timer = new StopWatch();
+
 // Loop through each card and create its HTML
 newGame = () => {
     tilesFlipped = 0;
     let output = '';
     for (let i = 0; i < deck.cards.length; i++) {
-        output += `<li class="${deck.cards[i].class}" onclick="clickFunction(this)"><i class="${deck.cards[i].icon}"></i></li>`; 
+        output += `<li class="${deck.cards[i].class}" onclick="clickFunction(this)"><a class="${deck.cards[i].icon}"></a></li>`; 
     };
     document.getElementById('deck').innerHTML = output;
     document.getElementsByClassName('moves')[0].innerHTML = 0;
     numMoves = 0;
     seenTiles = [];
+    tilesMatched = [];
     shuffle(deck.cards);
 }
 
 //Function when card is clicked
 clickFunction = (element) => {
+    
+    //Start the timer
+    timer.start();
+
     //increase number of moves by 1 for every click
     numMoves +=1;
     document.getElementsByClassName('moves')[0].innerHTML = numMoves;
+    
     //add 1 for every card flipped
     tilesFlipped += 1;
-    //only allow flips if there are < or = 2 flipped cards and element class is not match
+    
+    //only allow flips if there are < or = 2 flipped cards
     if (tilesFlipped <= 2 ){ 
+        
         //flip and show card
         element.setAttribute("class", "card open show");
-        //add card's child element which hold the icon to seenTiles
+        
+        //add card into a list called seenTiles
         seenTiles.push(element);
         console.log(seenTiles);
         console.log(seenTiles[0].children[0].className);
         console.log(seenTiles[1].children[0].className);
         
-        //if className(icons) do match
+        //if icons (className) on card DO match
         if (seenTiles[0].children[0].className == seenTiles[1].children[0].className){
-            //remove open and show classes
+            
+            //mark cards as a match set
             seenTiles[0].setAttribute("class", "card match");
             seenTiles[1].setAttribute("class", "card match");   
-            //add to tilesMatched
+            
+            //add macthes to a list called tilesMatched
             tilesMatched.push(seenTiles[0]);
             tilesMatched.push(seenTiles[1]);
             console.log(tilesMatched.length);
-            //empty seenTiles array       
+            
+            //empty seenTiles array (holds opened cards)      
             seenTiles = [];
             tilesFlipped = 0;
+
+            //if number of cards matched = number or cards, then win the game
             if (tilesMatched.length == deck.cards.length){
-                alert("Congratulations!! You won!!!");
-                newGame();
+
+                //stop timer
+                timer.stop();
+
+                //don't display container with game
+                document.getElementsByClassName("container")[0].style.display="none";
+
+                //display winning message / with number of moves made / time length of game
+                document.getElementsByClassName('win')[0].style.display="block";
+                document.getElementsByClassName('enterNumMoves')[0].innerHTML = numMoves;             
+                document.getElementsByClassName('enterTime')[0].innerHTML = timer.duration();             
             }
-        }        
-        //if className(icons) do NOT match
+        }     
+
+        //if className(icons) DO NOT match
         else if (seenTiles[0].children[0].className != seenTiles[1].children[0].className){            
+            
+            //Wait a bit before closing card
             setTimeout(function() {
-                //remove open and show classes, add close class
+                
+                //Close mismatched cards
                 seenTiles[0].setAttribute("class", "card close");
                 seenTiles[1].setAttribute("class", "card close");
-                //empty seenTiles array
+                
+                //remove cards listed under seenTiles array
                 seenTiles = [];            
-            }, 500);            
+            }, 500);
+            //reset number of flipped cards          
             tilesFlipped = 0;
         }        
     }    
 }
-//add each card's HTML to the page
+//Start a new game (reshuffle, reset time and number of moves)
 newGame();
