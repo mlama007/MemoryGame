@@ -75,12 +75,33 @@ h1 {
     font-size: 33px;
 }
 
+/* match */
 .deck .card.match {
     cursor: default;
     background: #02ccba;
     font-size: 33px;
 }
 
+@keyframes pulse_animation {
+	0% { transform: scale(1); }
+	50% { transform: scale(.8); }
+	60% { transform: scale(1); }
+	70% { transform: scale(.8); }
+	80% { transform: scale(1); }
+	100% { transform: scale(1); }
+}
+
+.match {
+	animation-name: pulse_animation;
+	animation-duration: 1000ms;
+	transform-origin:70% 70%;
+	animation-iteration-count: 1000ms;
+	animation-timing-function: linear;
+}
+
+
+
+/* mismatch */
 .deck .card.close {
     cursor: default;  
     -webkit-animation-duration: .5s; 

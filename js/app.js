@@ -148,8 +148,6 @@ newGame = () => {
 
 //tiles that have open and show class
 let seenTiles = [];
-//tiles that have match class
-let matchedTiles = [];
 //number of tiles flipped in this round
 let tilesFlipped = 0;
 
@@ -158,7 +156,7 @@ clickFunction = (element) => {
     //add 1 for every card flipped
     tilesFlipped += 1;
     //only allow flips if there are < or = 2 flipped cards and element class is not match
-    if (tilesFlipped <= 2){
+    if (tilesFlipped <= 2){ 
         //flip and show card
         element.setAttribute("class", "card open show");
         //add card's child element which hold the icon to seenTiles
@@ -171,7 +169,10 @@ clickFunction = (element) => {
         if (seenTiles[0].children[0].className == seenTiles[1].children[0].className){
             //remove open and show classes
             seenTiles[0].setAttribute("class", "card match");
-            seenTiles[1].setAttribute("class", "card match");
+            seenTiles[1].setAttribute("class", "card match");   
+            //empty seenTiles array       
+            seenTiles = [];
+            tilesFlipped = 0;
         }        
         //if className(icons) do NOT match
         else if (seenTiles[0].children[0].className != seenTiles[1].children[0].className){            
@@ -179,33 +180,12 @@ clickFunction = (element) => {
                 //remove open and show classes, add close class
                 seenTiles[0].setAttribute("class", "card close");
                 seenTiles[1].setAttribute("class", "card close");
-            
                 //empty seenTiles array
-                seenTiles = [];
-            }, 400); 
+                seenTiles = [];            
+            }, 500);            
+            tilesFlipped = 0;
         }
-        
-        
-
-        //if className (icons) for each of the child elements are the same
-        // if (tilesFlipped = 2 && seenTiles[0].children[0].className == seenTiles[1].children[0].className){
-        //     seenTiles[0].setAttribute("class", "card match");
-        //     seenTiles[1].setAttribute("class", "card match");
-        //     alert("ppop");
-        //     console.log(seenTiles);
-        //     matchedTiles.push(seenTiles[0],seenTiles[1]);
-        }
-    //close card if more than 2 tiles are flipped
-    // else if (tilesFlipped = 2 && seenTiles[0].children[0].className !== seenTiles[1].children[0].className){
-    //     seenTiles[0].setAttribute("class", "card");
-    //     seenTiles[1].setAttribute("class", "card");
-    // }
-    // else if (tilesFlipped > 2){
-    //     element.setAttribute("class", "card");
-    // }
-    // }    
+    }
 }
-
-
 //add each card's HTML to the page
 newGame();
