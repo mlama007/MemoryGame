@@ -164,6 +164,17 @@ h1 {
     padding-top: 8em;
     font-weight: bold;
 }
+.win .stars {
+    margin: 0;
+    padding: 0;
+    display: inline-block;
+    margin: 0 5px 0 0;
+}
+
+.win .stars li {
+    list-style: none;
+    display: inline-block;
+}
 .win p {
     padding: 3em;
 }

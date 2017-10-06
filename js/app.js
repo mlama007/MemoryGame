@@ -102,7 +102,6 @@ function shuffle(array) {
 // Shuffle and log results
 shuffle(deck.cards);
 console.log(deck.cards);
-console.log(deck.cards.length);
 
 //variables
 //tiles that have open and show class
@@ -168,110 +167,119 @@ newGame = () => {
     tilesMatched = [];
     shuffle(deck.cards);
     timer = new StopWatch();
+    document.getElementsByClassName("1")[0].style.visibility="visible";
+    document.getElementsByClassName("2")[0].style.visibility="visible";
+    document.getElementsByClassName("3")[0].style.visibility="visible";
 }
 
 //Function when card is clicked
 clickFunction = (element) => {
-    
     //Start the timer
     timer.start();
 
-    //increase number of moves by 1 for every click
-    numMoves +=1;
-    document.getElementsByClassName('moves')[0].innerHTML = numMoves;
-    
-    //Change stars earned
-    let numStars = 3;
-    //if user has more than 20 moves, take off 1 star
-    if ( numMoves > 20 ){
-        document.getElementById("1").style.display="none";
-        numStars -=1;
+    //if card is already flipped, log message
+    if (element.getAttribute("class") == "card open show" || element.getAttribute("class") == "card match" ){
+        console.log("already opened");
     }
-    //if user has more than 30 moves, take off 1 star
-    if ( numMoves > 30 ){
-        document.getElementById("2").style.display="none";
-        numStars -=1;
+    else {
+        //increase number of moves by 1 for every click
+        numMoves +=1;
+        document.getElementsByClassName('moves')[0].innerHTML = numMoves;
+        
+        //Change stars earned
+        let numStars = 3;
+        //if user has more than 35 moves, take off 1 star
+        if ( numMoves > 35 ){
+            document.getElementsByClassName("1")[0].style.visibility="hidden";
+            numStars -=1;
+        }
+        //if user has more than 45 moves, take off 1 star
+        if ( numMoves > 45 ){
+            document.getElementsByClassName("2")[0].style.visibility="hidden";
+            numStars -=1;
+        }
+        //if user has more than 55 moves, take off 1 star
+        if ( numMoves > 55 ){
+            document.getElementsByClassName("3")[0].style.visibility="hidden";
+            numStars -=1;
+        }
+ 
+        //only allow flips if there are < or = 2 flipped cards
+        if (tilesFlipped != 2 ){ 
+            //add 1 for every card flipped
+            tilesFlipped += 1;  
+            console.log(tilesFlipped);
+
+            //flip and show card
+            element.setAttribute("class", "card open show");
+            
+            //add card into a list called seenTiles
+            seenTiles.push(element);
+            console.log(seenTiles);
+            console.log(seenTiles[0].children[0].className);
+            console.log(seenTiles[1].children[0].className);
+
+
+            //if icons (className) on card DO match
+            if (seenTiles[0].children[0].className == seenTiles[1].children[0].className){
+                
+                //mark cards as a match set
+                seenTiles[0].setAttribute("class", "card match");
+                seenTiles[1].setAttribute("class", "card match");   
+                
+                //add macthes to a list called tilesMatched
+                tilesMatched.push(seenTiles[0]);
+                tilesMatched.push(seenTiles[1]);
+                console.log(tilesMatched.length);
+                
+                //empty seenTiles array (holds opened cards)      
+                seenTiles = [];
+                tilesFlipped = 0;
+
+                //if number of cards matched = number or cards, then win the game
+                if (tilesMatched.length == deck.cards.length){
+
+                    //stop timer
+                    timer.stop();
+
+                    //don't display memory game
+                    document.getElementsByClassName("container")[0].style.visibility= "hidden";
+
+                    //display winning message / number of stars / number of moves made / time length of game
+                    document.getElementsByClassName('win')[0].style.display="block";
+                    
+                    document.getElementsByClassName('insertStars')[0].innerHTML = numStars;             
+                    document.getElementsByClassName('enterNumMoves')[0].innerHTML = numMoves;             
+                    document.getElementsByClassName('enterTime')[0].innerHTML = timer.duration();             
+                }
+            }     
+
+            //if className(icons) DO NOT match
+            else if (seenTiles[0].children[0].className != seenTiles[1].children[0].className){            
+                
+                //Wait a bit before closing card
+                setTimeout(function() {
+                    
+                    //Close mismatched cards
+                    seenTiles[0].setAttribute("class", "card close");
+                    seenTiles[1].setAttribute("class", "card close");
+                    
+                    //remove cards listed under seenTiles array
+                    seenTiles = [];            
+                }, 500);
+                //reset number of flipped cards          
+                tilesFlipped = 0;
+            }        
+        }  
     }
-    //if user has more than 40 moves, take off 1 star
-    if ( numMoves > 40 ){
-        document.getElementById("3").style.display="none";
-        numStars -=1;
-    }
-
-    //add 1 for every card flipped
-    tilesFlipped += 1;
-    
-    //only allow flips if there are < or = 2 flipped cards
-    if (tilesFlipped <= 2 ){ 
-        
-        //flip and show card
-        element.setAttribute("class", "card open show");
-        
-        //add card into a list called seenTiles
-        seenTiles.push(element);
-        console.log(seenTiles);
-        console.log(seenTiles[0].children[0].className);
-        console.log(seenTiles[1].children[0].className);
-        
-        //if icons (className) on card DO match
-        if (seenTiles[0].children[0].className == seenTiles[1].children[0].className){
-            
-            //mark cards as a match set
-            seenTiles[0].setAttribute("class", "card match");
-            seenTiles[1].setAttribute("class", "card match");   
-            
-            //add macthes to a list called tilesMatched
-            tilesMatched.push(seenTiles[0]);
-            tilesMatched.push(seenTiles[1]);
-            console.log(tilesMatched.length);
-            
-            //empty seenTiles array (holds opened cards)      
-            seenTiles = [];
-            tilesFlipped = 0;
-
-            //if number of cards matched = number or cards, then win the game
-            if (tilesMatched.length == deck.cards.length){
-
-                //stop timer
-                timer.stop();
-
-                //don't display container with game
-                document.getElementsByClassName("container")[0].style.visibility= "hidden";
-
-                //display winning message / number of stars / number of moves made / time length of game
-                document.getElementsByClassName('win')[0].style.display="block";
-                
-                document.getElementsByClassName('insertStars')[0].innerHTML = numStars;             
-                document.getElementsByClassName('enterNumMoves')[0].innerHTML = numMoves;             
-                document.getElementsByClassName('enterTime')[0].innerHTML = timer.duration();             
-            }
-        }     
-
-        //if className(icons) DO NOT match
-        else if (seenTiles[0].children[0].className != seenTiles[1].children[0].className){            
-            
-            //Wait a bit before closing card
-            setTimeout(function() {
-                
-                //Close mismatched cards
-                seenTiles[0].setAttribute("class", "card close");
-                seenTiles[1].setAttribute("class", "card close");
-                
-                //remove cards listed under seenTiles array
-                seenTiles = [];            
-            }, 500);
-            //reset number of flipped cards          
-            tilesFlipped = 0;
-        }        
-    }    
 }
 //Start a new game (reshuffle, reset time and number of moves)
 newGame();
 
 newBoard = ()=>{
-    //display winning message / number of stars / number of moves made / time length of game
+    //don't display winning message
     document.getElementsByClassName('win')[0].style.display="none";
-    //don't display container with game
+    //display container with game
     document.getElementsByClassName("container")[0].style.visibility= "visible";
     
     
