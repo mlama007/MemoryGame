@@ -202,8 +202,7 @@ clickFunction = (element) => {
         //only allow flips if there are < or = 2 flipped cards
         if (tilesFlipped < 2 ){ 
             //add 1 for every card flipped
-            tilesFlipped += 1;  
-            console.log(tilesFlipped);
+            tilesFlipped += 1;
 
             //flip and show card
             element.setAttribute("class", "card open show");
@@ -221,7 +220,6 @@ clickFunction = (element) => {
                 //add macthes to a list called tilesMatched
                 tilesMatched.push(seenTiles[0]);
                 tilesMatched.push(seenTiles[1]);
-                console.log(tilesMatched.length);
                 
                 //empty seenTiles array (holds opened cards)      
                 seenTiles = [];

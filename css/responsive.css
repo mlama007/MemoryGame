@@ -1,0 +1,14 @@
+@media screen and (max-width: 415px) {
+    .container {
+
+        
+    }
+    .container ul {
+        width: 90%;
+        height: auto;
+    }
+    .container ul .deck li {
+        padding-bottom: 1em;
+    }
+    
+}
