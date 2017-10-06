@@ -186,26 +186,21 @@ clickFunction = (element) => {
         numMoves +=1;
         document.getElementsByClassName('moves')[0].innerHTML = numMoves;
         
-        //Change stars earned
-        let numStars = 3;
         //if user has more than 35 moves, take off 1 star
         if ( numMoves > 35 ){
             document.getElementsByClassName("1")[0].style.visibility="hidden";
-            numStars -=1;
         }
         //if user has more than 45 moves, take off 1 star
         if ( numMoves > 45 ){
             document.getElementsByClassName("2")[0].style.visibility="hidden";
-            numStars -=1;
         }
         //if user has more than 55 moves, take off 1 star
         if ( numMoves > 55 ){
             document.getElementsByClassName("3")[0].style.visibility="hidden";
-            numStars -=1;
         }
- 
+        
         //only allow flips if there are < or = 2 flipped cards
-        if (tilesFlipped != 2 ){ 
+        if (tilesFlipped < 2 ){ 
             //add 1 for every card flipped
             tilesFlipped += 1;  
             console.log(tilesFlipped);
@@ -215,13 +210,9 @@ clickFunction = (element) => {
             
             //add card into a list called seenTiles
             seenTiles.push(element);
-            console.log(seenTiles);
-            console.log(seenTiles[0].children[0].className);
-            console.log(seenTiles[1].children[0].className);
-
 
             //if icons (className) on card DO match
-            if (seenTiles[0].children[0].className == seenTiles[1].children[0].className){
+            if (tilesFlipped == 2 && seenTiles[0].children[0].className == seenTiles[1].children[0].className){
                 
                 //mark cards as a match set
                 seenTiles[0].setAttribute("class", "card match");
@@ -247,15 +238,14 @@ clickFunction = (element) => {
 
                     //display winning message / number of stars / number of moves made / time length of game
                     document.getElementsByClassName('win')[0].style.display="block";
-                    
-                    document.getElementsByClassName('insertStars')[0].innerHTML = numStars;             
+            
                     document.getElementsByClassName('enterNumMoves')[0].innerHTML = numMoves;             
                     document.getElementsByClassName('enterTime')[0].innerHTML = timer.duration();             
                 }
             }     
 
             //if className(icons) DO NOT match
-            else if (seenTiles[0].children[0].className != seenTiles[1].children[0].className){            
+            else if (tilesFlipped == 2 && seenTiles[0].children[0].className != seenTiles[1].children[0].className){            
                 
                 //Wait a bit before closing card
                 setTimeout(function() {
@@ -265,10 +255,11 @@ clickFunction = (element) => {
                     seenTiles[1].setAttribute("class", "card close");
                     
                     //remove cards listed under seenTiles array
-                    seenTiles = [];            
+                    seenTiles = [];  
+                    //reset number of flipped cards          
+                    tilesFlipped = 0;          
                 }, 500);
-                //reset number of flipped cards          
-                tilesFlipped = 0;
+                
             }        
         }  
     }
