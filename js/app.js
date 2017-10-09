@@ -113,52 +113,105 @@ let numMoves = 0;
 //tiles matched
 let tilesMatched = [];
 
-//StopWatch from https://www.codeproject.com/articles/29330/javascript-stopwatch
-function StopWatch(){
-    var startTime = null;
-    var stopTime = null;
-    var running = false;
-    this.start = function(){        
-        if (running == true)
-            return;
-        else if (startTime != null)
-            stopTime = null;
-        
-        running = true;    
-        startTime = getTime();
+
+//Stopwatch from https://codepen.io/_Billy_Brown/pen/dbJeh
+
+class Stopwatch {
+    constructor(display, results) {
+        this.running = false;
+        this.display = display;
+        this.results = results;
+        this.laps = [];
+        this.reset();
+        this.print(this.times);
     }
-    this.stop = function(){
-        
-        if (running == false)
-            return;    
-        
-        stopTime = getTime();
-        running = false;
+    
+    reset() {
+        this.times = [ 0, 0, 0 ];
     }
-    this.duration = function(){
-        if (startTime == null || stopTime == null)
-            return 'Undefined';
-        else
-            return (stopTime - startTime) / 1000;
+    
+    start() {
+        if (!this.time) this.time = performance.now();
+        if (!this.running) {
+            this.running = true;
+            requestAnimationFrame(this.step.bind(this));
+        }
+    }
+    
+    stop() {
+        this.running = false;
+        this.time = null;
     }
 
-    this.isRunning = function() { return running; }
-
-    function getTime(){
-        var day = new Date();
-        return day.getTime();
+    restart() {
+        if (!this.time) this.time = performance.now();
+        if (!this.running) {
+            this.running = true;
+            requestAnimationFrame(this.step.bind(this));
+        }
+        this.reset();
     }
-
+    
+    step(timestamp) {
+        if (!this.running) return;
+        this.calculate(timestamp);
+        this.time = timestamp;
+        this.print();
+        requestAnimationFrame(this.step.bind(this));
+    }
+    
+    calculate(timestamp) {
+        var diff = timestamp - this.time;
+        // Hundredths of a second are 100 ms
+        this.times[2] += diff / 10;
+        // Seconds are 100 hundredths of a second
+        if (this.times[2] >= 100) {
+            this.times[1] += 1;
+            this.times[2] -= 100;
+        }
+        // Minutes are 60 seconds
+        if (this.times[1] >= 60) {
+            this.times[0] += 1;
+            this.times[1] -= 60;
+        }
+    }
+    
+    print() {
+        this.display.innerText = this.format(this.times);
+    }
+    
+    format(times) {
+        return `\
+        ${pad0(times[0], 2)}:\
+        ${pad0(times[1], 2)}:\
+        ${pad0(Math.floor(times[2]), 2)}`;
+    }
 }
-//timer creates new stop wacth
-let timer = new StopWatch();
+
+function pad0(value, count) {
+    var result = value.toString();
+    for (; result.length < count; --count)
+        result = '0' + result;
+    return result;
+}
+
+function clearChildren(node) {
+    while (node.lastChild)
+        node.removeChild(node.lastChild);
+}
+
+let stopwatch = new Stopwatch(
+    document.querySelector('.stopwatch'),
+    document.querySelector('.results')
+);
+
 
 // Loop through each card and create its HTML
 newGame = () => {
     tilesFlipped = 0;
     let output = '';
     for (let i = 0; i < deck.cards.length; i++) {
-        output += `<li class="${deck.cards[i].class}" onclick="clickFunction(this)"><a class="${deck.cards[i].icon}"></a></li>`; 
+        output += `<li class="${deck.cards[i].class}" onclick="stopwatch.start();clickFunction(this)"><a class="${deck.cards[i].icon}"></a></li>`; 
     };
     document.getElementById('deck').innerHTML = output;
     document.getElementsByClassName('moves')[0].innerHTML = 0;
@@ -166,23 +219,20 @@ newGame = () => {
     seenTiles = [];
     tilesMatched = [];
     shuffle(deck.cards);
-    timer = new StopWatch();
+    stopwatch.restart;
     document.getElementsByClassName("1")[0].style.visibility="visible";
     document.getElementsByClassName("2")[0].style.visibility="visible";
 }
 
 //Function when card is clicked
 clickFunction = (element) => {
-    //Start the timer
-    timer.start();
+
 
     //if card is already flipped, log message
     if (element.getAttribute("class") === "card open show" || element.getAttribute("class") === "card match" ){
         console.log("already opened");
     }
     else {
-        //increase number of moves by 1 for every click
-        // document.getElementsByClassName('moves')[0].innerHTML = numMoves;
 
         //only allow flips if there are < or = 2 flipped cards
         if (tilesFlipped < 2 ){ 
@@ -227,9 +277,8 @@ clickFunction = (element) => {
 
                 //if number of cards matched = number or cards, then win the game
                 if (tilesMatched.length === deck.cards.length){
-
                     //stop timer
-                    timer.stop();
+                    stopwatch.stop();
 
                     //don't display memory game
                     document.getElementsByClassName("container")[0].style.visibility= "hidden";
@@ -237,8 +286,8 @@ clickFunction = (element) => {
                     //display winning message / number of stars / number of moves made / time length of game
                     document.getElementsByClassName('win')[0].style.display="block";
             
-                    document.getElementsByClassName('enterNumMoves')[0].innerHTML = numMoves;             
-                    document.getElementsByClassName('enterTime')[0].innerHTML = timer.duration();             
+                    document.getElementsByClassName('enterNumMoves')[0].innerHTML = numMoves;                       
+                    document.getElementsByClassName('time')[0].innerHTML = document.getElementsByClassName('stopwatch')[0].innerHTML;                       
                 }
             }     
 

@@ -331,3 +331,10 @@ margin-left: 10%;
 .confetti21 {
 margin-left: 92%;
 }
+
+/* StopWatch */
+.stopwatch {
+    padding-left: 2em;
+    font-weight: bold;
+    color: #02ccba;
+}
