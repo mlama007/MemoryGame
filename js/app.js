@@ -169,7 +169,6 @@ newGame = () => {
     timer = new StopWatch();
     document.getElementsByClassName("1")[0].style.visibility="visible";
     document.getElementsByClassName("2")[0].style.visibility="visible";
-    document.getElementsByClassName("3")[0].style.visibility="visible";
 }
 
 //Function when card is clicked
@@ -178,27 +177,13 @@ clickFunction = (element) => {
     timer.start();
 
     //if card is already flipped, log message
-    if (element.getAttribute("class") == "card open show" || element.getAttribute("class") == "card match" ){
+    if (element.getAttribute("class") === "card open show" || element.getAttribute("class") === "card match" ){
         console.log("already opened");
     }
     else {
         //increase number of moves by 1 for every click
-        numMoves +=1;
-        document.getElementsByClassName('moves')[0].innerHTML = numMoves;
-        
-        //if user has more than 35 moves, take off 1 star
-        if ( numMoves > 35 ){
-            document.getElementsByClassName("1")[0].style.visibility="hidden";
-        }
-        //if user has more than 45 moves, take off 1 star
-        if ( numMoves > 45 ){
-            document.getElementsByClassName("2")[0].style.visibility="hidden";
-        }
-        //if user has more than 55 moves, take off 1 star
-        if ( numMoves > 55 ){
-            document.getElementsByClassName("3")[0].style.visibility="hidden";
-        }
-        
+        // document.getElementsByClassName('moves')[0].innerHTML = numMoves;
+
         //only allow flips if there are < or = 2 flipped cards
         if (tilesFlipped < 2 ){ 
             //add 1 for every card flipped
@@ -210,8 +195,23 @@ clickFunction = (element) => {
             //add card into a list called seenTiles
             seenTiles.push(element);
 
+            if (tilesFlipped === 2) {
+                numMoves++;
+                document.getElementsByClassName('moves')[0].innerHTML = numMoves;
+                //if user has more than 15 moves, take off 1 star
+                if ( numMoves > 15 ){
+                    document.getElementsByClassName("1")[0].style.visibility="hidden";
+                    document.getElementsByClassName("1")[1].style.visibility="hidden";
+                }
+                //if user has more than 20 moves, take off 1 star
+                if ( numMoves > 20 ){
+                    document.getElementsByClassName("2")[0].style.visibility="hidden";
+                    document.getElementsByClassName("2")[1].style.visibility="hidden";
+                }
+            }
+            
             //if icons (className) on card DO match
-            if (tilesFlipped == 2 && seenTiles[0].children[0].className == seenTiles[1].children[0].className){
+            if (tilesFlipped === 2 && seenTiles[0].children[0].className === seenTiles[1].children[0].className){
                 
                 //mark cards as a match set
                 seenTiles[0].setAttribute("class", "card match");
@@ -226,7 +226,7 @@ clickFunction = (element) => {
                 tilesFlipped = 0;
 
                 //if number of cards matched = number or cards, then win the game
-                if (tilesMatched.length == deck.cards.length){
+                if (tilesMatched.length === deck.cards.length){
 
                     //stop timer
                     timer.stop();
@@ -243,7 +243,7 @@ clickFunction = (element) => {
             }     
 
             //if className(icons) DO NOT match
-            else if (tilesFlipped == 2 && seenTiles[0].children[0].className != seenTiles[1].children[0].className){            
+            else if (tilesFlipped === 2 && seenTiles[0].children[0].className !== seenTiles[1].children[0].className){            
                 
                 //Wait a bit before closing card
                 setTimeout(function() {
@@ -259,7 +259,7 @@ clickFunction = (element) => {
                 }, 500);
                 
             }        
-        }  
+        }          
     }
 }
 //Start a new game (reshuffle, reset time and number of moves)
