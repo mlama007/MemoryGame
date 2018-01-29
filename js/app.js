@@ -219,9 +219,14 @@ newGame = () => {
     seenTiles = [];
     tilesMatched = [];
     shuffle(deck.cards);
-    stopwatch.restart;
+    stopwatch.reset();
+    stopwatch.restart();
     document.getElementsByClassName("1")[0].style.visibility="visible";
+    document.getElementsByClassName("1")[1].style.visibility="visible";
     document.getElementsByClassName("2")[0].style.visibility="visible";
+    document.getElementsByClassName("2")[1].style.visibility="visible";
+    document.getElementsByClassName("3")[0].style.visibility="visible";
+    document.getElementsByClassName("3")[1].style.visibility="visible";
 }
 
 //Function when card is clicked
@@ -288,6 +293,10 @@ clickFunction = (element) => {
             
                     document.getElementsByClassName('enterNumMoves')[0].innerHTML = numMoves;                       
                     document.getElementsByClassName('time')[0].innerHTML = document.getElementsByClassName('stopwatch')[0].innerHTML;                       
+                    document.getElementsByClassName("1")[1].style.visibility="hidden";
+                    document.getElementsByClassName("2")[1].style.visibility="hidden";
+                    document.getElementsByClassName("3")[1].style.visibility="hidden";
+                    
                 }
             }     
 
