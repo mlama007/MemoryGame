@@ -211,7 +211,7 @@ newGame = () => {
     tilesFlipped = 0;
     let output = '';
     for (let i = 0; i < deck.cards.length; i++) {
-        output += `<li class="${deck.cards[i].class}" onclick="stopwatch.start();clickFunction(this)"><a class="${deck.cards[i].icon}"></a></li>`; 
+        output += `<button class="${deck.cards[i].class}" onclick="stopwatch.start();clickFunction(this)"><a class="${deck.cards[i].icon}"></a></button>`; 
     };
     document.getElementById('deck').innerHTML = output;
     document.getElementsByClassName('moves')[0].innerHTML = 0;
