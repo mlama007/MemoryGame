@@ -211,7 +211,7 @@ newGame = () => {
     tilesFlipped = 0;
     let output = '';
     for (let i = 0; i < deck.cards.length; i++) {
-        output += `<button class="${deck.cards[i].class}" onclick="stopwatch.start();clickFunction(this)"><a class="${deck.cards[i].icon}"></a></button>`; 
+        output += `<li class="listItem"><button class="${deck.cards[i].class}" onclick="stopwatch.start();clickFunction(this)"><div class="${deck.cards[i].icon}"></div></button></li>`; 
     };
     document.getElementById('deck').innerHTML = output;
     document.getElementsByClassName('moves')[0].innerHTML = 0;
@@ -232,13 +232,13 @@ newGame = () => {
 //Function when card is clicked
 clickFunction = (element) => {
 
-
     //if card is already flipped, log message
     if (element.getAttribute("class") === "card open show" || element.getAttribute("class") === "card match" ){
         console.log("already opened");
+        document.getElementById('announce').innerHTML = "<p aria-live='polite'>Card already opened</p>";
     }
     else {
-
+        
         //only allow flips if there are < or = 2 flipped cards
         if (tilesFlipped < 2 ){ 
             //add 1 for every card flipped
@@ -267,7 +267,6 @@ clickFunction = (element) => {
             
             //if icons (className) on card DO match
             if (tilesFlipped === 2 && seenTiles[0].children[0].className === seenTiles[1].children[0].className){
-                
                 //mark cards as a match set
                 seenTiles[0].setAttribute("class", "card match");
                 seenTiles[1].setAttribute("class", "card match");   
@@ -279,18 +278,18 @@ clickFunction = (element) => {
                 //empty seenTiles array (holds opened cards)      
                 seenTiles = [];
                 tilesFlipped = 0;
-
+                
                 //if number of cards matched = number or cards, then win the game
                 if (tilesMatched.length === deck.cards.length){
                     //stop timer
                     stopwatch.stop();
-
+                    
                     //don't display memory game
                     document.getElementsByClassName("container")[0].style.visibility= "hidden";
-
+                    
                     //display winning message / number of stars / number of moves made / time length of game
                     document.getElementsByClassName('win')[0].style.display="block";
-            
+                    
                     document.getElementsByClassName('enterNumMoves')[0].innerHTML = numMoves;                       
                     document.getElementsByClassName('time')[0].innerHTML = document.getElementsByClassName('stopwatch')[0].innerHTML;                       
                     document.getElementsByClassName("1")[1].style.visibility="hidden";
@@ -298,6 +297,12 @@ clickFunction = (element) => {
                     document.getElementsByClassName("3")[1].style.visibility="hidden";
                     
                 }
+
+                // setTimeout(function() {
+                    console.log('ML match')
+                    document.getElementById('announce').innerHTML = "<p aria-live='polite'>Found a match!</p>";
+                    console.log('ML announce', document.getElementById('announce'));
+                // }, 3000);
             }     
 
             //if className(icons) DO NOT match
@@ -315,8 +320,14 @@ clickFunction = (element) => {
                     //reset number of flipped cards          
                     tilesFlipped = 0;          
                 }, 500);
+
+                // setTimeout(function() {
+                    console.log('ML not match')
+                    document.getElementById('announce').innerHTML = "<p aria-live='polite'>No match found!</p>";
+                    console.log('ML announce', document.getElementById('announce'));
+                // }, 3000);
                 
-            }        
+            }   
         }          
     }
 }

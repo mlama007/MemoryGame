@@ -338,3 +338,11 @@ margin-left: 92%;
     font-weight: bold;
     color: #02ccba;
 }
+
+.link {
+    margin: 1em auto 3em;
+}
+
+.listItem{
+    list-style: none;
+}
